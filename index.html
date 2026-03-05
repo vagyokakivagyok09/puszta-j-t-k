@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puszta: Igaz vagy Hamis? 🌾</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --grass: #4a7c2f;
+    --grass-light: #6aad42;
+    --earth: #c4914a;
+    --earth-dark: #7a4e1e;
+    --sun: #f7cc3a;
+    --sun-warm: #e89c10;
+    --true-col: #2e7d32;
+    --true-bg: #e8f5e9;
+    --false-col: #c62828;
+    --false-bg: #ffebee;
+    --card-bg: #fffef4;
+    --text-dark: #1e2d0e;
+    --text-mid: #3d5220;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(160deg, #b8dff0 0%, #cfe89a 50%, #c4914a 100%);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+  .bg-deco { position: fixed; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+  .blade { position: absolute; bottom: 0; width: 18px; border-radius: 50% 50% 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite alternate; }
+  @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+  .sun-fixed { position: fixed; top: 16px; right: 22px; font-size: 2.8rem; z-index: 2; animation: spin 20s linear infinite; filter: drop-shadow(0 0 10px #f7cc3a); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #app { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; padding: 16px 14px 70px; }
+  header { text-align: center; padding: 28px 10px 14px; }
+  header h1 { font-family: 'Baloo 2', cursive; font-size: 2.6rem; font-weight: 800; color: var(--text-dark); text-shadow: 3px 3px 0 var(--sun), 5px 5px 0 var(--earth-dark); line-height: 1.1; }
+  header p { margin-top: 6px; font-size: 1rem; color: var(--text-mid); font-weight: 600; }
+
+  /* NAME SCREEN */
+  .name-screen {
+    background: var(--card-bg); border-radius: 22px; padding: 36px 28px;
+    border: 2.5px solid #d4c070; box-shadow: 5px 6px 0 #b09030;
+    text-align: center; animation: cardIn 0.4s ease;
+  }
+  .name-screen h2 { font-family: 'Baloo 2', cursive; font-size: 1.7rem; font-weight: 800; color: var(--grass); margin-bottom: 8px; }
+  .name-screen p { color: var(--text-mid); font-size: 1rem; margin-bottom: 24px; font-weight: 600; }
+  .name-input {
+    font-family: 'Baloo 2', cursive; font-size: 1.2rem; font-weight: 700;
+    padding: 14px 20px; border-radius: 16px; border: 2.5px solid var(--grass);
+    width: 100%; max-width: 320px; text-align: center; outline: none;
+    color: var(--text-dark); background: #f6ffe0;
+    box-shadow: 2px 3px 0 var(--grass); transition: border-color 0.2s;
+    margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto;
+  }
+  .name-input:focus { border-color: var(--sun-warm); box-shadow: 2px 3px 0 var(--sun-warm); }
+  .start-btn {
+    font-family: 'Baloo 2', cursive; font-size: 1.2rem; font-weight: 800;
+    padding: 14px 44px; background: var(--grass); color: white;
+    border: none; border-radius: 30px; cursor: pointer;
+    box-shadow: 3px 4px 0 var(--earth-dark); transition: all 0.15s;
+  }
+  .start-btn:hover { background: var(--grass-light); transform: translateY(-2px); }
+  .start-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  /* TOP BAR */
+  .top-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .q-counter { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1rem; color: var(--grass); white-space: nowrap; min-width: 72px; }
+  .prog-wrap { flex: 1; background: rgba(255,255,255,0.45); border-radius: 20px; height: 14px; overflow: hidden; border: 2px solid rgba(74,124,47,0.3); min-width: 60px; }
+  .prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--grass-light), var(--sun)); transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .score-pill { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1rem; background: var(--card-bg); border: 2px solid var(--grass); border-radius: 30px; padding: 4px 14px; color: var(--grass); box-shadow: 2px 2px 0 var(--grass); white-space: nowrap; }
+  .timer-pill { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1rem; background: #e8f0ff; border: 2px solid #5577cc; border-radius: 30px; padding: 4px 14px; color: #2244aa; box-shadow: 2px 2px 0 #2244aa; white-space: nowrap; }
+
+  /* STREAK PILL */
+  .streak-pill { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1rem; background: #fff8e0; border: 2px solid var(--sun-warm); border-radius: 30px; padding: 4px 14px; color: var(--earth-dark); box-shadow: 2px 2px 0 var(--sun-warm); white-space: nowrap; transition: background 0.3s, border-color 0.3s, color 0.3s; }
+  .streak-pill.pop { animation: streakPop 0.4s cubic-bezier(.4,0,.2,1); }
+  @keyframes streakPop { 0%{transform:scale(1)} 40%{transform:scale(1.45) rotate(-6deg)} 70%{transform:scale(0.92) rotate(4deg)} 100%{transform:scale(1) rotate(0)} }
+  .streak-pill.on-fire { background: linear-gradient(90deg,#ffe066,#ff8c00); border-color: #cc5500; color: white; box-shadow: 2px 2px 0 #8b3800; }
+  .streak-pill.broken { background: #ffe0e0; border-color: var(--false-col); color: var(--false-col); box-shadow: 2px 2px 0 #7a1010; animation: streakBreak 0.45s ease; }
+  @keyframes streakBreak { 0%{transform:scale(1)} 30%{transform:scale(1.12) rotate(8deg)} 65%{transform:scale(0.9) rotate(-5deg)} 100%{transform:scale(1) rotate(0)} }
+
+  /* DIFF BADGES */
+  .diff-badge { display: inline-block; border-radius: 20px; padding: 3px 14px; font-family: 'Baloo 2', cursive; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 14px; }
+  .diff-1 { background: #d4f7c0; color: #2a6010; border: 2px solid #6aad42; }
+  .diff-2 { background: #fff3c0; color: #7a5000; border: 2px solid #e89c10; }
+  .diff-3 { background: #ffd9c0; color: #7a2800; border: 2px solid #e05c1a; }
+
+  /* QUESTION CARD */
+  .q-card { background: var(--card-bg); border-radius: 22px; padding: 28px 26px 22px; border: 2.5px solid #d4c070; box-shadow: 5px 6px 0 #b09030; animation: cardIn 0.35s cubic-bezier(.4,0,.2,1); }
+  @keyframes cardIn { from { opacity:0; transform: translateY(18px) scale(0.97); } to { opacity:1; transform: none; } }
+  .q-number { font-family: 'Baloo 2', cursive; font-size: 0.88rem; font-weight: 700; color: #a08030; margin-bottom: 6px; }
+  .q-text { font-family: 'Baloo 2', cursive; font-size: 1.28rem; font-weight: 700; color: var(--text-dark); line-height: 1.45; margin-bottom: 24px; }
+
+  .answer-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .ans-btn { font-family: 'Baloo 2', cursive; font-size: 1.35rem; font-weight: 800; padding: 18px 10px; border-radius: 18px; border: 3px solid; cursor: pointer; transition: transform 0.13s, box-shadow 0.13s, background 0.13s; display: flex; align-items: center; justify-content: center; gap: 10px; letter-spacing: 0.5px; }
+  .btn-true  { background: var(--true-bg); color: var(--true-col); border-color: var(--true-col); box-shadow: 3px 4px 0 #1a4f1e; }
+  .btn-false { background: var(--false-bg); color: var(--false-col); border-color: var(--false-col); box-shadow: 3px 4px 0 #7a1010; }
+  .ans-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.04); box-shadow: 4px 7px 0 rgba(0,0,0,0.18); }
+  .ans-btn:disabled { cursor: default; opacity: 0.7; }
+  .ans-btn.selected-correct { background: #b9f0bc; transform: scale(1.04); }
+  .ans-btn.selected-wrong   { background: #ffb3b3; }
+  .ans-btn.reveal-correct   { background: #b9f0bc; }
+
+  .feedback { border-radius: 14px; padding: 13px 16px; font-size: 0.97rem; font-weight: 700; line-height: 1.5; margin-bottom: 14px; display: none; }
+  .feedback.show { display: block; animation: feedIn 0.25s ease; }
+  @keyframes feedIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+  .feedback.correct { background: #d4f7d4; border: 2.5px solid var(--true-col); color: #1a4f1e; }
+  .feedback.wrong   { background: #ffe0e0; border: 2.5px solid var(--false-col); color: #7a0000; }
+
+  .next-btn { font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 800; padding: 13px 40px; background: var(--grass); color: white; border: none; border-radius: 30px; cursor: pointer; box-shadow: 3px 4px 0 var(--earth-dark); transition: all 0.15s; display: none; margin: 0 auto; }
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: var(--grass-light); transform: translateY(-2px); }
+
+  /* RESULT */
+  .result-screen { background: var(--card-bg); border-radius: 22px; padding: 36px 24px; border: 2.5px solid #d4c070; box-shadow: 5px 6px 0 #b09030; text-align: center; animation: cardIn 0.4s ease; }
+  .result-emoji { font-size: 4.5rem; display: block; margin-bottom: 12px; }
+  .result-title { font-family: 'Baloo 2', cursive; font-size: 2rem; font-weight: 800; color: var(--grass); margin-bottom: 8px; }
+  .result-sub { font-size: 1.05rem; color: var(--text-mid); margin-bottom: 22px; font-weight: 600; }
+  .result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: #f4ffe4; border: 2px solid var(--grass-light); border-radius: 14px; padding: 12px 6px; }
+  .stat-box.streak-stat { background: #fff8e0; border-color: var(--sun-warm); }
+  .stat-box.time-stat { background: #e8f0ff; border-color: #5577cc; }
+  .stat-num { font-family: 'Baloo 2', cursive; font-size: 2rem; font-weight: 800; color: var(--grass); }
+  .stat-box.streak-stat .stat-num { color: var(--earth-dark); }
+  .stat-box.time-stat .stat-num { color: #2244aa; }
+  .stat-lbl { font-size: 0.75rem; color: var(--text-mid); font-weight: 700; }
+  .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 10px; }
+
+  .saving-msg { font-family: 'Baloo 2', cursive; font-size: 1rem; font-weight: 700; color: var(--text-mid); margin-bottom: 16px; min-height: 28px; }
+  .saving-msg.ok { color: var(--true-col); }
+  .saving-msg.err { color: var(--false-col); }
+
+  .restart-btn { font-family: 'Baloo 2', cursive; font-size: 1.15rem; font-weight: 800; padding: 14px 44px; background: var(--earth); color: white; border: none; border-radius: 30px; cursor: pointer; box-shadow: 3px 4px 0 var(--earth-dark); transition: all 0.15s; }
+  .restart-btn:hover { transform: translateY(-2px); background: var(--sun-warm); }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 2rem; }
+    .q-text { font-size: 1.1rem; }
+    .ans-btn { font-size: 1.15rem; padding: 15px 8px; }
+    .result-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-deco" id="bgDeco"></div>
+<div class="sun-fixed">☀️</div>
+<div id="app">
+  <header>
+    <h1>🌾 Igaz vagy Hamis?</h1>
+    <p>Puszták és mocsárrétek — 20 állítás, egyre nehezebben!</p>
+  </header>
+  <div id="gameArea"></div>
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxhBeO23qbXIToArYsiquZxpxlAdidFPtjt23vKW9kP8JbJMZ3cXu6JyhsFza6vl7iH/exec";
+
+const questions = [
+  { text: "A puszták az Alföldön is megtalálhatók.", answer: true, diff: 1, explain: "Igen! Az Alföld a puszták egyik legismertebb helyszíne Magyarországon." },
+  { text: "A pázsitfűfélék szárát szalmaszárnak nevezzük.", answer: true, diff: 1, explain: "Igen! A szalmaszár belül üreges és hajlékony." },
+  { text: "A mezeizsálya lila virágú növény.", answer: true, diff: 1, explain: "Pontosan! A mezeizsálya jellegzetesen lila virágú, illatos gyógynövény." },
+  { text: "A mocsárrét talaja mindig száraz.", answer: false, diff: 1, explain: "Nem igaz! A mocsárrét állandóan nedves talajon alakul ki." },
+  { text: "A réti boglárka sárga virágú növény.", answer: true, diff: 1, explain: "Igen! Élénksárga, fényes szirmú virágai tavasszal sárgára festik a réteket." },
+  { text: "A pázsitfűfélék levelei hosszúak és keskenyek.", answer: true, diff: 1, explain: "Igen! A hosszú, keskeny levelek segítenek alkalmazkodni a szeles pusztai körülményekhez." },
+  { text: "A mocsári zsurló valódi virágokat nevel.", answer: false, diff: 1, explain: "Nem! A mocsári zsurló spórákkal szaporodik, nincs valódi virága." },
+  { text: "A puszták kizárólag emberi beavatkozás hatására jöttek létre.", answer: false, diff: 2, explain: "Nem igaz! Az őshonos puszták emberi beavatkozás nélkül, természetes úton alakultak ki." },
+  { text: "A pázsitfűfélék virágait a szél porozza be.", answer: true, diff: 2, explain: "Helyes! A virágok aprók — a szél végzi a beporzást, nem a rovarok." },
+  { text: "Az angolperje magas termetű, sűrű csomókban növő fű.", answer: false, diff: 2, explain: "Nem! Ez a siskanád leírása. Az angolperje alacsony termetű fű." },
+  { text: "A mezeizsálya szőrös levelei csökkentik a párolgást.", answer: true, diff: 2, explain: "Igen! Ezért bírja jól a tűző napot — a szőrök védik a levelet a kiszáradástól." },
+  { text: "A mocsári zsurló szárát a benne lévő kovasav teszi érdesé.", answer: true, diff: 2, explain: "Helyes! A kovasav miatt érdes a szára — régen edények tisztítására is használták." },
+  { text: "A réti boglárka szárított állapotban is mérgező.", answer: false, diff: 2, explain: "Nem igaz! Frissen mérgező, de szárítva már veszélytelen az állatok számára." },
+  { text: "A puszták megjelennek a középhegységek északi, hűvösebb oldalain is.", answer: false, diff: 2, explain: "Nem! A puszták a középhegységek déli, melegebb oldalain alakulnak ki." },
+  { text: "A pázsitfűfélék bojtos gyökérzete segít a felszíni nedvesség gyors felszívásában.", answer: true, diff: 3, explain: "Igen! A sűrű bojtos gyökérzet nemcsak rögzíti a növényt, hanem gyorsan fel is szívja a csapadékot." },
+  { text: "A siskanád jól tűri a száraz időszakokat.", answer: true, diff: 3, explain: "Helyes! A siskanád magasabb termetű, de kitűnően bírja a szárazságot is." },
+  { text: "A pázsitfűfélék szára azért ellenálló a szélnek, mert kemény és fás.", answer: false, diff: 3, explain: "Nem! A szalmaszár éppen azért ellenálló, mert üreges és HAJLÉKONY — rugalmas, nem kemény." },
+  { text: "A mocsárrétek buja növényzete annak köszönhető, hogy ott a víz nem korlátozó tényező.", answer: true, diff: 3, explain: "Pontosan! Mivel a talaj állandóan nedves, a növények korlátlanul jutnak vízhez." },
+  { text: "A pázsitfűfélék szárölelő levelei gyengítik a szár szerkezetét.", answer: false, diff: 3, explain: "Nem igaz! A szárölelő levélhüvely rásimul a szárra és VÉDI, valamint MEREVÍTI azt." },
+  { text: "A mocsári zsurló minden állat számára mérgező hatású lehet.", answer: true, diff: 3, explain: "Igen! A mocsári zsurló a háziállatok számára mérgező — fontos felismerni a legelőkön." },
+];
+
+let playerName = '';
+let current = 0, score = 0, streak = 0, bestStreak = 0, answered = false;
+let startTime = 0, timerInterval = null, elapsedSeconds = 0;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return (m > 0 ? m + ' perc ' : '') + sec + ' mp';
+}
+
+function streakLabel() {
+  if (streak === 0) return '🔥 0';
+  if (streak >= 5) return '🔥🔥 ' + streak + '!!!';
+  if (streak >= 3) return '🔥 ' + streak + '!';
+  return '🔥 ' + streak;
+}
+function diffLabel(d) {
+  if (d === 1) return ['diff-1', '🟢 Könnyű'];
+  if (d === 2) return ['diff-2', '🟡 Közepes'];
+  return ['diff-3', '🔴 Nehéz'];
+}
+function starsStr(sc, total) {
+  const p = sc / total;
+  if (p >= 0.9) return '⭐⭐⭐';
+  if (p >= 0.65) return '⭐⭐';
+  return '⭐';
+}
+
+function updateTimerDisplay() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const el = document.getElementById('timerPill');
+  if (el) el.textContent = '⏱ ' + formatTime(elapsedSeconds);
+}
+
+function showNameScreen() {
+  document.getElementById('gameArea').innerHTML =
+    '<div class="name-screen">' +
+      '<div style="font-size:3rem;margin-bottom:10px;">🌾</div>' +
+      '<h2>Üdvözöllek!</h2>' +
+      '<p>Írd be a neved a kezdés előtt!</p>' +
+      '<input class="name-input" id="nameInput" type="text" placeholder="Pl. Kovács Péter" maxlength="40" />' +
+      '<button class="start-btn" id="startBtn" onclick="startGame()" disabled>Kezdjük! 🚀</button>' +
+    '</div>';
+  const inp = document.getElementById('nameInput');
+  inp.addEventListener('input', function() {
+    document.getElementById('startBtn').disabled = this.value.trim().length < 2;
+  });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && this.value.trim().length >= 2) startGame();
+  });
+  inp.focus();
+}
+
+function startGame() {
+  const inp = document.getElementById('nameInput');
+  playerName = inp ? inp.value.trim() : playerName;
+  if (playerName.length < 2) return;
+  current = 0; score = 0; streak = 0; bestStreak = 0; answered = false;
+  startTime = Date.now(); elapsedSeconds = 0;
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimerDisplay, 1000);
+  render();
+}
+
+function render() {
+  const area = document.getElementById('gameArea');
+  if (current >= questions.length) {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    const pct = Math.round(score / questions.length * 100);
+    let emoji, title, sub;
+    if (pct >= 90) { emoji = '🏆'; title = 'Pusztai mester!'; sub = 'Szinte tökéletes — gratulálunk, ' + playerName + '!'; }
+    else if (pct >= 70) { emoji = '🌟'; title = 'Nagyszerű munka!'; sub = 'Nagyon jól ismered az anyagot!'; }
+    else if (pct >= 50) { emoji = '🌱'; title = 'Jó kezdet!'; sub = 'Nézd át újra és biztosan jobban megy!'; }
+    else { emoji = '🌾'; title = 'Még gyakorolni kell!'; sub = 'Olvasd el a tananyagot és próbáld újra!'; }
+
+    area.innerHTML =
+      '<div class="result-screen">' +
+        '<span class="result-emoji">' + emoji + '</span>' +
+        '<div class="stars">' + starsStr(score, questions.length) + '</div>' +
+        '<div class="result-title">' + title + '</div>' +
+        '<div class="result-sub">' + sub + '</div>' +
+        '<div class="result-grid">' +
+          '<div class="stat-box"><div class="stat-num">' + score + ' / 20</div><div class="stat-lbl">✅ Helyes válasz</div></div>' +
+          '<div class="stat-box"><div class="stat-num">' + pct + '%</div><div class="stat-lbl">📊 Arány</div></div>' +
+          '<div class="stat-box time-stat"><div class="stat-num">' + formatTime(elapsedSeconds) + '</div><div class="stat-lbl">⏱ Idő</div></div>' +
+          '<div class="stat-box streak-stat"><div class="stat-num">' + bestStreak + '</div><div class="stat-lbl">🔥 Legjobb sorozat</div></div>' +
+        '</div>' +
+        '<div class="saving-msg" id="savingMsg">⏳ Eredmény mentése...</div>' +
+        '<button class="restart-btn" onclick="showNameScreen()">🔄 Újra játszom</button>' +
+      '</div>';
+
+    // Save to Google Sheets
+    saveResult(playerName, score, elapsedSeconds, bestStreak);
+    return;
+  }
+
+  const q = questions[current];
+  const [dClass, dLabel] = diffLabel(q.diff);
+  const prog = Math.round((current / questions.length) * 100);
+  const onFire = streak >= 3;
+  const nextLabel = current + 1 < questions.length ? 'Következő ➡️' : 'Eredmény 🏆';
+
+  area.innerHTML =
+    '<div class="top-bar">' +
+      '<div class="q-counter">' + (current+1) + ' / ' + questions.length + '</div>' +
+      '<div class="prog-wrap"><div class="prog-fill" style="width:' + prog + '%"></div></div>' +
+      '<div class="score-pill">🌟 ' + score + '</div>' +
+      '<div class="streak-pill ' + (onFire ? 'on-fire' : '') + '" id="streakPill">' + streakLabel() + '</div>' +
+      '<div class="timer-pill" id="timerPill">⏱ 0 mp</div>' +
+    '</div>' +
+    '<div class="q-card">' +
+      '<div class="q-number">📋 ' + (current+1) + '. kérdés — ' + playerName + '</div>' +
+      '<span class="diff-badge ' + dClass + '">' + dLabel + '</span>' +
+      '<div class="q-text">"' + q.text + '"</div>' +
+      '<div class="answer-row">' +
+        '<button class="ans-btn btn-true" id="btnTrue" onclick="answer(true)">✅ IGAZ</button>' +
+        '<button class="ans-btn btn-false" id="btnFalse" onclick="answer(false)">❌ HAMIS</button>' +
+      '</div>' +
+      '<div class="feedback" id="feedback"></div>' +
+      '<button class="next-btn" id="nextBtn" onclick="next()">' + nextLabel + '</button>' +
+    '</div>';
+  answered = false;
+}
+
+function answer(choice) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const correct = choice === q.answer;
+  if (correct) { score++; streak++; if (streak > bestStreak) bestStreak = streak; }
+  else { streak = 0; }
+
+  const btnTrue  = document.getElementById('btnTrue');
+  const btnFalse = document.getElementById('btnFalse');
+  btnTrue.disabled = true; btnFalse.disabled = true;
+  const chosen = choice ? btnTrue : btnFalse;
+  if (correct) { chosen.classList.add('selected-correct'); }
+  else { chosen.classList.add('selected-wrong'); (q.answer ? btnTrue : btnFalse).classList.add('reveal-correct'); }
+
+  const pill = document.getElementById('streakPill');
+  if (pill) {
+    pill.textContent = streakLabel();
+    pill.className = 'streak-pill';
+    void pill.offsetWidth;
+    if (!correct) { pill.classList.add('broken'); }
+    else { if (streak >= 3) pill.classList.add('on-fire'); pill.classList.add('pop'); }
+  }
+
+  const fb = document.getElementById('feedback');
+  let prefix = correct ? '✅ Helyes! ' : '❌ Nem egészen. ';
+  if (correct && streak >= 5) prefix = '🔥🔥 ' + streak + ' egymás utáni helyes válasz! ';
+  else if (correct && streak >= 3) prefix = '🔥 ' + streak + ' sorozat! ';
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong');
+  fb.textContent = prefix + q.explain;
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function next() { current++; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+
+function saveResult(name, score, time, bestStreak) {
+  fetch(SHEET_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ name: name, score: score, time: formatTime(time), bestStreak: bestStreak })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const msg = document.getElementById('savingMsg');
+    if (msg) { msg.textContent = '✅ Eredmény elmentve a táblázatba!'; msg.className = 'saving-msg ok'; }
+  })
+  .catch(() => {
+    const msg = document.getElementById('savingMsg');
+    if (msg) { msg.textContent = '⚠️ Mentés nem sikerült — ellenőrizd az internet kapcsolatot.'; msg.className = 'saving-msg err'; }
+  });
+}
+
+// grass deco
+const deco = document.getElementById('bgDeco');
+const cols = ['#5a8a3c','#4a7c2f','#6aad42','#3d6e25'];
+for (let i = 0; i < 22; i++) {
+  const b = document.createElement('div');
+  b.className = 'blade';
+  b.style.cssText = 'left:' + (Math.random()*100) + '%; height:' + (40+Math.random()*80) + 'px; background:' + cols[i%4] + '; opacity:' + (0.25+Math.random()*0.3) + '; animation-duration:' + (2.5+Math.random()*2) + 's; animation-delay:' + (Math.random()*2) + 's;';
+  deco.appendChild(b);
+}
+
+showNameScreen();
+</script>
+</body>
+</html>
