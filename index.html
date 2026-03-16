@@ -25,7 +25,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;background:#12121f;color:
 .bg-deco::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(124,58,237,.10) 0%,transparent 70%);}
 .bg-deco::after{content:'';position:absolute;bottom:-20%;left:10%;width:80%;height:60%;background:radial-gradient(ellipse at 50% 100%,rgba(34,197,94,.06) 0%,transparent 70%);}
 .sun-fixed{display:none;}
-#app{position:relative;z-index:2;max-width:740px;margin:0 auto;padding:16px 14px 70px;}
+#app{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:16px 14px 70px;}
 header{text-align:center;padding:32px 10px 14px;}
 header h1{font-family:'DM Serif Display',serif;font-style:italic;font-size:2.4rem;font-weight:400;color:#fff;letter-spacing:-.01em;line-height:1.1;text-shadow:0 0 40px rgba(124,58,237,.5);}
 header h1 em{color:#7c3aed;font-style:normal;}
@@ -217,25 +217,30 @@ header p{margin-top:6px;font-size:.72rem;letter-spacing:.14em;text-transform:upp
 .start-btn{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;padding:13px 40px;background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.45);border-radius:25px;cursor:pointer;transition:all 0.15s;}
 .start-btn:hover{background:rgba(124,58,237,.28);border-color:rgba(124,58,237,.7);transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,.25);}
 .start-btn:disabled{opacity:0.3;cursor:default;transform:none;}
-.cube-landing{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0 6px;min-height:400px;}
+.cube-landing{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0 6px;min-height:520px;}
 .cube-hint{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#475569;font-weight:500;margin-bottom:20px;animation:hintFade 5s 1.5s both;}
 @keyframes hintFade{0%{opacity:0}15%{opacity:1}75%{opacity:1}100%{opacity:0}}
-.dual-cubes{display:flex;align-items:flex-start;justify-content:center;gap:70px;width:100%;position:relative;}
-.cube-wrapper{display:flex;flex-direction:column;align-items:center;gap:0;position:relative;padding-top:62px;padding-bottom:36px;}
-.cube-wrapper-title{position:absolute;top:0;left:50%;transform:translateX(-50%);width:180px;font-family:'DM Serif Display',serif;font-style:italic;font-size:.92rem;font-weight:400;color:#fff;text-align:center;line-height:1.3;text-shadow:0 0 14px rgba(255,255,255,.2);pointer-events:none;z-index:10;}
+.dual-cubes{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 10px;width:100%;justify-items:center;}
+@media(max-width:600px){.dual-cubes{grid-template-columns:repeat(2,1fr);gap:24px 6px;}}
+.cube-wrapper{display:flex;flex-direction:column;align-items:center;gap:0;position:relative;padding-top:52px;padding-bottom:28px;}
+.cube-wrapper-title{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;font-family:'DM Serif Display',serif;font-style:italic;font-size:.78rem;font-weight:400;color:#fff;text-align:center;line-height:1.3;text-shadow:0 0 14px rgba(255,255,255,.2);pointer-events:none;z-index:10;}
 .cube-wrapper-title.green{color:#4ade80;text-shadow:0 0 14px rgba(34,197,94,.4);}
 .cube-wrapper-title.blue{color:#7dd3fc;text-shadow:0 0 14px rgba(56,189,248,.4);}
 .cube-wrapper-label{position:absolute;bottom:0;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:'Space Grotesk',sans-serif;font-size:.7rem;letter-spacing:.08em;font-weight:600;opacity:.55;text-align:center;pointer-events:none;z-index:10;}
 .cube-wrapper-label.green{color:#4ade80;}
 .cube-wrapper-label.blue{color:#7dd3fc;}
-.scene{width:160px;height:160px;perspective:600px;perspective-origin:50% 40%;cursor:pointer;}
+.scene{width:130px;height:130px;perspective:500px;perspective-origin:50% 40%;cursor:pointer;}
 .cube3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;transform:rotateX(-18deg) rotateY(22deg);animation:cubeIntro .8s cubic-bezier(.22,.82,.26,1) both;transition:filter .25s;}
-#cube3dGreen{--cube-glow:rgba(34,197,94,.5);animation-delay:.05s;}
-#cube3dBlue{--cube-glow:rgba(56,189,248,.5);animation-delay:.18s;}
+.cube3d:nth-child(1){animation-delay:.05s;}
+.cube3d:nth-child(2){animation-delay:.12s;}
+.cube3d:nth-child(3){animation-delay:.20s;}
+.cube3d:nth-child(4){animation-delay:.28s;}
+.cube3d:nth-child(5){animation-delay:.36s;}
+.cube3d:nth-child(6){animation-delay:.44s;}
 .cube3d:hover{cursor:grab;}
 @keyframes cubeIntro{from{transform:rotateX(-18deg) rotateY(22deg) scale3d(.3,.3,.3);opacity:0}to{transform:rotateX(-18deg) rotateY(22deg) scale3d(1,1,1);opacity:1}}
-@keyframes rollLeft{0%{transform:rotateX(-18deg) rotateY(22deg) translateX(0) translateY(0) scale(1);opacity:1;}30%{transform:rotateX(180deg) rotateY(300deg) translateX(-160px) translateY(15px) scale(.95);opacity:1;}70%{transform:rotateX(450deg) rotateY(720deg) translateX(-380px) translateY(35px) scale(.9);opacity:.7;}100%{transform:rotateX(650deg) rotateY(1000deg) translateX(-600px) translateY(60px) scale(.8);opacity:0;}}
-@keyframes rollRight{0%{transform:rotateX(-18deg) rotateY(22deg) translateX(0) translateY(0) scale(1);opacity:1;}30%{transform:rotateX(180deg) rotateY(-300deg) translateX(160px) translateY(15px) scale(.95);opacity:1;}70%{transform:rotateX(450deg) rotateY(-720deg) translateX(380px) translateY(35px) scale(.9);opacity:.7;}100%{transform:rotateX(650deg) rotateY(-1000deg) translateX(600px) translateY(60px) scale(.8);opacity:0;}}
+@keyframes rollLeft{0%{transform:rotateX(-18deg) rotateY(22deg) translateX(0) translateY(0) scale(1);opacity:1;}30%{transform:rotateX(180deg) rotateY(300deg) translateX(-120px) translateY(12px) scale(.95);opacity:1;}70%{transform:rotateX(450deg) rotateY(720deg) translateX(-300px) translateY(28px) scale(.9);opacity:.7;}100%{transform:rotateX(650deg) rotateY(1000deg) translateX(-480px) translateY(50px) scale(.8);opacity:0;}}
+@keyframes rollRight{0%{transform:rotateX(-18deg) rotateY(22deg) translateX(0) translateY(0) scale(1);opacity:1;}30%{transform:rotateX(180deg) rotateY(-300deg) translateX(120px) translateY(12px) scale(.95);opacity:1;}70%{transform:rotateX(450deg) rotateY(-720deg) translateX(300px) translateY(28px) scale(.9);opacity:.7;}100%{transform:rotateX(650deg) rotateY(-1000deg) translateX(480px) translateY(50px) scale(.8);opacity:0;}}
 .cube3d.rolling-left{animation:rollLeft .7s cubic-bezier(.3,0,.8,1) forwards !important;transition:none;}
 .cube3d.rolling-right{animation:rollRight .7s cubic-bezier(.3,0,.8,1) forwards !important;transition:none;}
 .explosion-container{position:absolute;top:80px;left:50%;width:0;height:0;pointer-events:none;z-index:60;}
@@ -248,24 +253,24 @@ header p{margin-top:6px;font-size:.72rem;letter-spacing:.14em;text-transform:upp
 @keyframes expText{0%{transform:translate(-50%,-50%) scale(.5);opacity:1;}60%{transform:translate(-50%,-100%) scale(1.4);opacity:1;}100%{transform:translate(-50%,-130%) scale(1.1);opacity:0;}}
 .exp-flash{position:fixed;inset:0;pointer-events:none;z-index:99;animation:expFlash .35s ease-out forwards;}
 @keyframes expFlash{0%{opacity:1}100%{opacity:0}}
-.cface{position:absolute;width:160px;height:160px;border-radius:10px;overflow:hidden;backface-visibility:hidden;border:1px solid rgba(255,255,255,.1);}
+.cface{position:absolute;width:130px;height:130px;border-radius:10px;overflow:hidden;backface-visibility:hidden;border:1px solid rgba(255,255,255,.1);}
 .cface::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent calc(33.3% - .5px),rgba(0,0,0,.35) calc(33.3% - .5px),rgba(0,0,0,.35) calc(33.3% + .5px),transparent calc(33.3% + .5px)),linear-gradient(transparent calc(66.6% - .5px),rgba(0,0,0,.35) calc(66.6% - .5px),rgba(0,0,0,.35) calc(66.6% + .5px),transparent calc(66.6% + .5px)),linear-gradient(90deg,transparent calc(33.3% - .5px),rgba(0,0,0,.35) calc(33.3% - .5px),rgba(0,0,0,.35) calc(33.3% + .5px),transparent calc(33.3% + .5px)),linear-gradient(90deg,transparent calc(66.6% - .5px),rgba(0,0,0,.35) calc(66.6% - .5px),rgba(0,0,0,.35) calc(66.6% + .5px),transparent calc(66.6% + .5px));z-index:3;pointer-events:none;}
 .cface::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.07) 0%,transparent 55%);z-index:2;pointer-events:none;}
-.cf-front{transform:translateZ(80px);}
-.cf-back{transform:rotateY(180deg) translateZ(80px);}
-.cf-right{transform:rotateY(90deg) translateZ(80px);}
-.cf-left{transform:rotateY(-90deg) translateZ(80px);}
-.cf-top{transform:rotateX(90deg) translateZ(80px);}
-.cf-bot{transform:rotateX(-90deg) translateZ(80px);}
+.cf-front{transform:translateZ(65px);}
+.cf-back{transform:rotateY(180deg) translateZ(65px);}
+.cf-right{transform:rotateY(90deg) translateZ(65px);}
+.cf-left{transform:rotateY(-90deg) translateZ(65px);}
+.cf-top{transform:rotateX(90deg) translateZ(65px);}
+.cf-bot{transform:rotateX(-90deg) translateZ(65px);}
 .green-face,.blue-face{position:absolute;inset:0;}
 .green-face{background:radial-gradient(ellipse at 40% 30%,#0d3520,#021008);color:#22c55e;}
 .blue-face{background:radial-gradient(ellipse at 40% 30%,#092540,#030c1a);color:#38bdf8;}
 .cface-fill{width:100%;height:100%;position:relative;}
 .cface-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;padding:12px;text-align:center;}
 .cface-num{position:absolute;top:8px;right:10px;font-family:'Space Grotesk',sans-serif;font-size:.6rem;font-weight:700;opacity:.5;letter-spacing:.05em;}
-.cface-icon{font-size:2.6rem;line-height:1;margin-bottom:8px;filter:drop-shadow(0 0 10px currentColor);animation:iconGlow 3s ease-in-out infinite;}
+.cface-icon{font-size:2rem;line-height:1;margin-bottom:6px;filter:drop-shadow(0 0 10px currentColor);animation:iconGlow 3s ease-in-out infinite;}
 @keyframes iconGlow{0%,100%{filter:drop-shadow(0 0 6px currentColor)}50%{filter:drop-shadow(0 0 20px currentColor)}}
-.cface-title{font-family:'DM Serif Display',serif;font-style:italic;font-size:.72rem;color:#fff;line-height:1.2;text-shadow:0 0 14px rgba(255,255,255,.25);}
+.cface-title{font-family:'DM Serif Display',serif;font-style:italic;font-size:.62rem;color:#fff;line-height:1.2;text-shadow:0 0 14px rgba(255,255,255,.25);}
 .cbr{position:absolute;width:12px;height:12px;border-color:currentColor;border-style:solid;opacity:.25;}
 .cbr.tl{top:5px;left:5px;border-width:1.5px 0 0 1.5px;}
 .cbr.tr{top:5px;right:5px;border-width:1.5px 1.5px 0 0;}
@@ -552,6 +557,85 @@ const BIG_TOPICS = [
       {id:11,icon:"♻️",title:"A vizek szennyezése. A vizes élőhelyek védelme",ready:false,tf:[],quiz:[],fill:[]},
     ]
   }
+  ,{
+    id: "erdo",
+    icon: "🌲",
+    title: "Az erdő életközössége",
+    style: "erdo",
+    subtopics: [
+      {id:1,icon:"🌿",title:"Az erdő életközössége (bevezető)",ready:false,tf:[],quiz:[],fill:[]},
+      {id:2,icon:"🌳",title:"Erdőt alkotó fáink: a tölgy és a bükk",ready:false,tf:[],quiz:[],fill:[]},
+      {id:3,icon:"🌲",title:"Az erdeifenyő. Gombák az erdőben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:4,icon:"🌸",title:"A cserjék és a gyepszint virágos növényei",ready:false,tf:[],quiz:[],fill:[]},
+      {id:5,icon:"🍂",title:"Virágtalan növények az erdőben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:6,icon:"🦌",title:"A gímszarvas, az őz és a vaddisznó",ready:false,tf:[],quiz:[],fill:[]},
+      {id:7,icon:"🦊",title:"A róka, a sün és a mókus",ready:false,tf:[],quiz:[],fill:[]},
+      {id:8,icon:"🐦",title:"Harkályok és énekesmadarak az erdőben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:9,icon:"🦅",title:"Ragadozó madarak az erdőben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:10,icon:"🦋",title:"Ízeltlábúak az erdőben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:11,icon:"🌳",title:"Az erdő életközössége (összefoglalás)",ready:false,tf:[],quiz:[],fill:[]},
+      {id:12,icon:"🛡️",title:"Az erdők védelme",ready:false,tf:[],quiz:[],fill:[]},
+      {id:13,icon:"🔍",title:"Megfigyelések, vizsgálatok az erdőben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:14,icon:"🧑‍🔬",title:"Herman Ottó munkássága",ready:false,tf:[],quiz:[],fill:[]},
+      {id:15,icon:"📋",title:"Rendszerezzük ismereteinket!",ready:false,tf:[],quiz:[],fill:[]},
+    ]
+  }
+  ,{
+    id: "kolcsonhatasok",
+    icon: "⚡",
+    title: "Kölcsönhatások. Az energia",
+    style: "kolcson",
+    subtopics: [
+      {id:1,icon:"🔧",title:"A mechanikai kölcsönhatás",ready:false,tf:[],quiz:[],fill:[]},
+      {id:2,icon:"🌡️",title:"A termikus kölcsönhatás",ready:false,tf:[],quiz:[],fill:[]},
+      {id:3,icon:"🔬",title:"Kísérletek, megfigyelések (termikus)",ready:false,tf:[],quiz:[],fill:[]},
+      {id:4,icon:"🧲",title:"Az elektromos és a mágneses kölcsönhatás",ready:false,tf:[],quiz:[],fill:[]},
+      {id:5,icon:"⚗️",title:"Kísérletek, megfigyelések (elektromos)",ready:false,tf:[],quiz:[],fill:[]},
+      {id:6,icon:"⚡",title:"Az energia I.",ready:false,tf:[],quiz:[],fill:[]},
+      {id:7,icon:"🔋",title:"Az energia II.",ready:false,tf:[],quiz:[],fill:[]},
+      {id:8,icon:"☀️",title:"A Nap és a napenergia",ready:false,tf:[],quiz:[],fill:[]},
+      {id:9,icon:"💡",title:"Energiafelhasználás, energiatakarékosság",ready:false,tf:[],quiz:[],fill:[]},
+      {id:10,icon:"🔬",title:"Kísérletek, megfigyelések (energia)",ready:false,tf:[],quiz:[],fill:[]},
+      {id:11,icon:"📋",title:"Rendszerezzük ismereteinket!",ready:false,tf:[],quiz:[],fill:[]},
+    ]
+  }
+  ,{
+    id: "fold",
+    icon: "🌍",
+    title: "A Föld bolygó",
+    style: "fold",
+    subtopics: [
+      {id:1,icon:"🪐",title:"Együtt a Naprendszerben",ready:false,tf:[],quiz:[],fill:[]},
+      {id:2,icon:"🧭",title:"Tájékozódás a gömb alakú Földön",ready:false,tf:[],quiz:[],fill:[]},
+      {id:3,icon:"🔄",title:"A Föld forgása",ready:false,tf:[],quiz:[],fill:[]},
+      {id:4,icon:"🔁",title:"A Föld keringése a Nap körül",ready:false,tf:[],quiz:[],fill:[]},
+      {id:5,icon:"🌡️",title:"Az éghajlati övezetek",ready:false,tf:[],quiz:[],fill:[]},
+      {id:6,icon:"💨",title:"A Föld éghajlatát alakító tényezők",ready:false,tf:[],quiz:[],fill:[]},
+      {id:7,icon:"🗺️",title:"Európa és Magyarország földrajzi helyzete",ready:false,tf:[],quiz:[],fill:[]},
+      {id:8,icon:"🌬️",title:"A levegő védelme, az emberiség védelme",ready:false,tf:[],quiz:[],fill:[]},
+      {id:9,icon:"🔍",title:"Megfigyelések, feladatok",ready:false,tf:[],quiz:[],fill:[]},
+      {id:10,icon:"📋",title:"Rendszerezzük ismereteinket!",ready:false,tf:[],quiz:[],fill:[]},
+    ]
+  }
+  ,{
+    id: "termeszet",
+    icon: "🌋",
+    title: "A természet erői",
+    style: "termeszet",
+    subtopics: [
+      {id:1,icon:"🌋",title:"A vulkánok és a földrengések",ready:false,tf:[],quiz:[],fill:[]},
+      {id:2,icon:"⛰️",title:"Hogyan keletkeztek a hegységek?",ready:false,tf:[],quiz:[],fill:[]},
+      {id:3,icon:"💧",title:"A külső erők felszínformáló munkája",ready:false,tf:[],quiz:[],fill:[]},
+      {id:4,icon:"🪨",title:"A kőzetek és a felszín formakincse",ready:false,tf:[],quiz:[],fill:[]},
+      {id:5,icon:"🏔️",title:"A lánchegységek és a röghegységek formakincse",ready:false,tf:[],quiz:[],fill:[]},
+      {id:6,icon:"🏞️",title:"Hogyan alakultak ki alföldjeink?",ready:false,tf:[],quiz:[],fill:[]},
+      {id:7,icon:"🌱",title:"Legértékesebb természeti erőforrásunk: a talaj",ready:false,tf:[],quiz:[],fill:[]},
+      {id:8,icon:"🏗️",title:"Hogyan alakítja át az ember a környezetét?",ready:false,tf:[],quiz:[],fill:[]},
+      {id:9,icon:"⏳",title:"Időszámítás a Föld és az emberiség történetében",ready:false,tf:[],quiz:[],fill:[]},
+      {id:10,icon:"🔍",title:"Megfigyelések, vizsgálódások",ready:false,tf:[],quiz:[],fill:[]},
+      {id:11,icon:"📋",title:"Rendszerezzük ismereteinket!",ready:false,tf:[],quiz:[],fill:[]},
+    ]
+  }
 ];
 
 let playerName='', currentBigTopic=null, currentTopic=null, mode='';
@@ -639,31 +723,61 @@ function makeCubeFaces(colorClass, bt){
   }).join('');
 }
 
+const CUBE_THEME={
+  fuves:{face:'green-face',label:'green',color:'#22c55e',flash:'rgba(34,197,94,.05)'},
+  vizek:{face:'blue-face',label:'blue',color:'#38bdf8',flash:'rgba(56,189,248,.05)'},
+  erdo:{face:'erdo-face',label:'erdo',color:'#86efac',flash:'rgba(134,239,172,.05)'},
+  kolcsonhatasok:{face:'amber-face',label:'amber',color:'#f59e0b',flash:'rgba(245,158,11,.05)'},
+  fold:{face:'sky-face',label:'sky',color:'#0ea5e9',flash:'rgba(14,165,233,.05)'},
+  termeszet:{face:'red-face',label:'red',color:'#ef4444',flash:'rgba(239,68,68,.05)'},
+};
+
 function showBigTopics(){
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
   pendingMode=null;
-  const green=BIG_TOPICS[0];
-  const blue=BIG_TOPICS[1];
-  const rG=green.subtopics.filter(function(s){return s.ready;}).length;
-  const rB=blue.subtopics.filter(function(s){return s.ready;}).length;
+
+  // inject extra face styles once
+  if(!document.getElementById('extraFaceStyles')){
+    const st=document.createElement('style');st.id='extraFaceStyles';
+    st.textContent=
+      '.erdo-face{background:radial-gradient(ellipse at 40% 30%,#0a2810,#020a04);color:#86efac;}'+
+      '.amber-face{background:radial-gradient(ellipse at 40% 30%,#3a2000,#100800);color:#f59e0b;}'+
+      '.sky-face{background:radial-gradient(ellipse at 40% 30%,#082040,#020810);color:#0ea5e9;}'+
+      '.red-face{background:radial-gradient(ellipse at 40% 30%,#3a0808,#100202);color:#ef4444;}'+
+      '.cube-wrapper-title.erdo{color:#86efac;text-shadow:0 0 14px rgba(134,239,172,.4);}'+
+      '.cube-wrapper-label.erdo{color:#86efac;}'+
+      '.cube-wrapper-title.amber{color:#fbbf24;text-shadow:0 0 14px rgba(251,191,36,.4);}'+
+      '.cube-wrapper-label.amber{color:#fbbf24;}'+
+      '.cube-wrapper-title.sky{color:#38bdf8;text-shadow:0 0 14px rgba(56,189,248,.4);}'+
+      '.cube-wrapper-label.sky{color:#38bdf8;}'+
+      '.cube-wrapper-title.red{color:#f87171;text-shadow:0 0 14px rgba(239,68,68,.4);}'+
+      '.cube-wrapper-label.red{color:#f87171;}';
+    document.head.appendChild(st);
+  }
+
+  let cubesHTML='';
+  BIG_TOPICS.forEach(function(bt,i){
+    const th=CUBE_THEME[bt.id]||CUBE_THEME.fuves;
+    const rCount=bt.subtopics.filter(function(s){return s.ready;}).length;
+    cubesHTML+=
+      '<div class="cube-wrapper" id="wrapper_'+bt.id+'">'+
+        '<div class="cube-wrapper-title '+th.label+'">'+bt.icon+' '+bt.title+'</div>'+
+        '<div class="scene" id="scene_'+bt.id+'">'+
+          '<div class="cube3d" id="cube3d_'+bt.id+'">'+makeCubeFaces(th.face,bt)+'</div>'+
+        '</div>'+
+        '<div class="cube-wrapper-label '+th.label+'">'+rCount+' / '+bt.subtopics.length+' altéma</div>'+
+      '</div>';
+  });
+
   document.getElementById('gameArea').innerHTML=
     '<div class="cube-landing">'+
       '<div class="cube-hint">← Kattints a kockára! →</div>'+
-      '<div class="dual-cubes" id="dualCubes">'+
-        '<div class="cube-wrapper" id="wrapperGreen">'+
-          '<div class="cube-wrapper-title green">🌾 '+green.title+'</div>'+
-          '<div class="scene" id="sceneGreen"><div class="cube3d" id="cube3dGreen">'+makeCubeFaces('green-face',green)+'</div></div>'+
-          '<div class="cube-wrapper-label green">'+rG+' / '+green.subtopics.length+' altéma elérhető</div>'+
-        '</div>'+
-        '<div class="cube-wrapper" id="wrapperBlue">'+
-          '<div class="cube-wrapper-title blue">💧 '+blue.title+'</div>'+
-          '<div class="scene" id="sceneBlue"><div class="cube3d" id="cube3dBlue">'+makeCubeFaces('blue-face',blue)+'</div></div>'+
-          '<div class="cube-wrapper-label blue">'+rB+' / '+blue.subtopics.length+' altéma elérhető</div>'+
-        '</div>'+
-      '</div>'+
+      '<div class="dual-cubes" id="dualCubes">'+cubesHTML+'</div>'+
     '</div>';
-  initDualCubeSpin('cube3dGreen','sceneGreen',false);
-  initDualCubeSpin('cube3dBlue','sceneBlue',true);
+
+  BIG_TOPICS.forEach(function(bt,i){
+    initDualCubeSpin('cube3d_'+bt.id,'scene_'+bt.id,(i%2===1));
+  });
 }
 
 function initDualCubeSpin(cubeId,sceneId,mirror){
@@ -686,7 +800,7 @@ function initDualCubeSpin(cubeId,sceneId,mirror){
   }
   function onEnd(){
     if(!dragging)return;dragging=false;
-    if(!moved){const which=cubeId==='cube3dGreen'?'green':'blue';triggerCubeRoll(which);return;}
+    if(!moved){const btId=cubeId.replace('cube3d_','');triggerCubeRoll(btId);return;}
     (function mom(){vel.x*=.92;vel.y*=.92;rotX+=vel.x;rotY+=vel.y;rotX=Math.max(-80,Math.min(80,rotX));applyRot();if(Math.abs(vel.x)>.05||Math.abs(vel.y)>.05)raf=requestAnimationFrame(mom);else{autoSpin=true;requestAnimationFrame(spin);}})();
   }
   scene.addEventListener('mousedown',function(e){e.preventDefault();onStart(e.clientX,e.clientY);});
@@ -699,27 +813,32 @@ function initDualCubeSpin(cubeId,sceneId,mirror){
   setTimeout(function(){if(autoSpin)requestAnimationFrame(spin);},mirror?300:100);
 }
 
-function triggerCubeRoll(which){
-  const idx=which==='green'?0:1;
-  const bt=BIG_TOPICS[idx];
-  const cubeEl=document.getElementById(which==='green'?'cube3dGreen':'cube3dBlue');
+function triggerCubeRoll(btId){
+  const bt=BIG_TOPICS.find(function(b){return b.id===btId;});
+  if(!bt)return;
+  const cubeEl=document.getElementById('cube3d_'+btId);
   if(!cubeEl||cubeEl.classList.contains('rolling-left')||cubeEl.classList.contains('rolling-right'))return;
-  const rollClass=which==='green'?'rolling-left':'rolling-right';
+  const idx=BIG_TOPICS.indexOf(bt);
+  const rollClass=(idx%2===0)?'rolling-left':'rolling-right';
   cubeEl.classList.add(rollClass);
-  setTimeout(function(){triggerExplosion(which,bt);},500);
+  setTimeout(function(){triggerExplosion(btId,bt);},500);
   setTimeout(function(){showSubtopicsInline(bt);},900);
 }
 
-function triggerExplosion(which,bt){
-  const color=which==='green'?'#22c55e':'#38bdf8';
+function triggerExplosion(btId,bt){
+  const th=CUBE_THEME[btId]||CUBE_THEME.fuves;
+  const color=th.color;
   const flash=document.createElement('div');
   flash.className='exp-flash';
-  flash.style.background=which==='green'?'rgba(34,197,94,.05)':'rgba(56,189,248,.05)';
+  flash.style.background=th.flash;
   document.body.appendChild(flash);
   setTimeout(function(){flash.remove();},400);
   const expC=document.createElement('div');
   expC.className='explosion-container';
-  expC.style.left=which==='green'?'25%':'75%';
+  const idx=BIG_TOPICS.findIndex(function(b){return b.id===btId;});
+  const totalCols=3;
+  const col=idx%totalCols;
+  expC.style.left=((col*33)+16)+'%';
   expC.style.top='100px';
   const dc=document.getElementById('dualCubes');
   if(!dc)return;
@@ -732,27 +851,26 @@ function triggerExplosion(which,bt){
     sp.style.cssText='--ang:'+ang+'deg;--dist:'+dist+';background:'+color+';';
     sp.style.animationDelay=(Math.random()*.08)+'s';expC.appendChild(sp);
   }
-  const em=document.createElement('div');em.className='exp-text';em.textContent=which==='green'?'🌾':'💧';expC.appendChild(em);
+  const em=document.createElement('div');em.className='exp-text';em.textContent=bt.icon;expC.appendChild(em);
   setTimeout(function(){expC.remove();},800);
 }
 
 function showSubtopicsInline(bt){
-  const isWater=bt.id==='vizek';
+  const th=CUBE_THEME[bt.id]||CUBE_THEME.fuves;
   let rows='';
   bt.subtopics.forEach(function(t){
     const locked=t.ready?'':'locked';
     const click=t.ready?'onclick="inlineSub(\''+bt.id+'\','+t.id+')"':'';
-    const wStyle=isWater?'water-style':'';
-    const badge=t.ready?'<span class="ready-badge'+(isWater?' water':'')+'">✅</span>':'<span class="coming-badge">⏳</span>';
-    rows+='<button class="subtopic-btn '+wStyle+' '+locked+'" '+click+' style="animation-delay:'+(bt.subtopics.indexOf(t)*.05)+'s">'+
+    const badge=t.ready?'<span class="ready-badge">✅</span>':'<span class="coming-badge">⏳</span>';
+    rows+='<button class="subtopic-btn '+locked+'" '+click+' style="animation-delay:'+(bt.subtopics.indexOf(t)*.05)+'s">'+
       '<span class="snum">'+t.id+'.</span><span class="sicon">'+t.icon+'</span>'+
       '<span><span class="stitle">'+t.title+'</span></span>'+badge+'</button>';
   });
   document.getElementById('gameArea').innerHTML=
-    '<div class="card subtopic-reveal-card '+(isWater?'water-theme':'')+'">'+
+    '<div class="card subtopic-reveal-card">'+
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">'+
         '<span style="font-size:2rem;">'+bt.icon+'</span>'+
-        '<h2 style="font-family:\'DM Serif Display\',serif;font-style:italic;font-size:1.2rem;font-weight:400;color:'+(isWater?'var(--water-light)':'#4ade80')+'">'+bt.title+'</h2>'+
+        '<h2 style="font-family:\'DM Serif Display\',serif;font-style:italic;font-size:1.2rem;font-weight:400;color:'+th.color+'">'+bt.title+'</h2>'+
       '</div>'+
       '<p class="sub" style="margin-bottom:14px;">Válassz altémát!</p>'+
       '<div class="subtopic-reveal-grid">'+rows+'</div>'+
