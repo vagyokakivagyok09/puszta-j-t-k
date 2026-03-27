@@ -89,6 +89,10 @@ header p{margin-top:6px;font-size:.72rem;letter-spacing:.14em;text-transform:upp
 .mode-btn.sort:hover{border-color:rgba(244,63,94,.7);background:rgba(244,63,94,.08);transform:translateY(-3px);box-shadow:0 8px 24px rgba(244,63,94,.15);}
 .mode-btn.cat{border-color:rgba(124,58,237,.3);color:#a78bfa;}
 .mode-btn.cat:hover{border-color:rgba(124,58,237,.7);background:rgba(124,58,237,.08);transform:translateY(-3px);box-shadow:0 8px 24px rgba(124,58,237,.15);}
+.mode-btn.komp{border-color:rgba(251,191,36,.3);color:#fbbf24;position:relative;overflow:hidden;}
+.mode-btn.komp::after{content:'HAMAROSAN';position:absolute;top:6px;right:-18px;background:rgba(251,191,36,.2);color:#fbbf24;font-size:.48rem;font-weight:700;letter-spacing:.08em;padding:2px 22px;transform:rotate(35deg);pointer-events:none;}
+.mode-btn.komp:hover{border-color:rgba(251,191,36,.6);background:rgba(251,191,36,.06);transform:translateY(-3px);box-shadow:0 8px 24px rgba(251,191,36,.12);}
+.mode-btn.cat:hover{border-color:rgba(124,58,237,.7);background:rgba(124,58,237,.08);transform:translateY(-3px);box-shadow:0 8px 24px rgba(124,58,237,.15);}
 .top-bar{display:flex;align-items:center;gap:7px;margin-bottom:18px;flex-wrap:wrap;}
 .q-counter{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;color:#94a3b8;white-space:nowrap;min-width:60px;}
 .back-game-btn{font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:600;background:transparent;border:1px solid rgba(255,255,255,.12);color:#475569;border-radius:12px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
@@ -936,6 +940,7 @@ function showModes(topicId){
         '<button class="mode-btn lyukas" onclick="startGame(\'fill\')"><span class="btn-icon">✏️</span><span class="btn-label">Lyukas szöveg</span><span class="btn-sub">10 mondat</span></button>'+
         (currentTopic.sort&&currentTopic.sort.length?'<button class="mode-btn sort" onclick="startGame(\'sort\')"><span class="btn-icon">🔢</span><span class="btn-label">Sorrendbe állítás</span><span class="btn-sub">'+currentTopic.sort.length+' feladat</span></button>':'')+
         (currentTopic.cat&&currentTopic.cat.length?'<button class="mode-btn cat" onclick="startGame(\'cat\')"><span class="btn-icon">🗂️</span><span class="btn-label">Kategorizálás</span><span class="btn-sub">'+currentTopic.cat.length+' feladat</span></button>':'')+
+        '<button class="mode-btn komp" onclick="showKompetenciaPlaceholder()"><span class="btn-icon">🎯</span><span class="btn-label">Kompetencia</span><span class="btn-sub">Hamarosan</span></button>'+
       '</div>'+
       '<button class="back-btn" onclick="showSubtopics(\''+currentBigTopic.id+'\')">← Vissza</button>'+
     '</div>';
@@ -955,6 +960,16 @@ function startGame(m){
   const raw=mode==='tf'?currentTopic.tf:mode==='quiz'?currentTopic.quiz:mode==='fill'?currentTopic.fill:mode==='sort'?currentTopic.sort:currentTopic.cat;
   shuffledQuestions=shuffleArray(raw);
   render();
+}
+
+function showKompetenciaPlaceholder(){
+  document.getElementById('gameArea').innerHTML=
+    '<div class="card" style="text-align:center;padding:40px 24px;">'+
+      '<div style="font-size:3.5rem;margin-bottom:14px;">🎯</div>'+
+      '<h2 style="font-family:'DM Serif Display',serif;font-style:italic;font-size:1.6rem;color:#fbbf24;margin-bottom:10px;">Kompetencia mód</h2>'+
+      '<p style="color:#94a3b8;font-size:.95rem;line-height:1.6;margin-bottom:28px;">Ez a játékmód fejlesztés alatt áll.<br>Hamarosan elérhető lesz!</p>'+
+      '<button class="back-btn" style="margin:0 auto;display:block;" onclick="showModes(currentTopic.id)">← Vissza a játékmódokhoz</button>'+
+    '</div>';
 }
 
 function backToModes(){
@@ -1632,6 +1647,19 @@ showBigTopics();
     </div>
   </div>
 </div>
+<style>
+/* ── Tananyag képes layout ── */
+.tananyag-blokk{display:flex;gap:16px;align-items:flex-start;margin-bottom:18px;}
+.tananyag-blokk.kepjobb{flex-direction:row;}
+.tananyag-blokk-szoveg{flex:1;min-width:0;}
+.tananyag-blokk-kep{flex-shrink:0;width:140px;}
+.tananyag-blokk-kep img{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.tananyag-kep-felirat{font-size:.65rem;color:#475569;text-align:center;margin-top:4px;font-style:italic;line-height:1.3;}
+@media(max-width:500px){.tananyag-blokk{flex-direction:column!important;}.tananyag-blokk-kep{width:100%;}}
+.tananyag-fogalom-kep{display:flex;gap:12px;align-items:flex-start;}
+.tananyag-fogalom-kep img{width:80px;border-radius:8px;border:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+.tananyag-fogalom-szoveg{flex:1;min-width:0;}
+</style>
 <script>
 function openTananyag(){
   if(!currentTopic||!currentTopic.tananyag)return;
@@ -1643,13 +1671,45 @@ function openTananyag(){
   var startBtn=document.getElementById('tananyagStartBtn');
   startBtn.style.borderColor=color;startBtn.style.color=color;startBtn.style.background='rgba(124,58,237,.1)';
   var html='';
-  if(t.bevezeto){html+='<div class="tananyag-section"><div class="tananyag-section-title" style="color:'+color+'">📝 Összefoglaló</div><p class="tananyag-text">'+t.bevezeto+'</p></div>';}
+
+  // ── Összefoglaló – opcionális kép jobbra ──
+  if(t.bevezeto){
+    var kepHTML='';
+    if(t.bevezeto_kep){
+      kepHTML='<div class="tananyag-blokk-kep"><img src="'+t.bevezeto_kep+'" alt="illusztráció">'+(t.bevezeto_kep_felirat?'<div class="tananyag-kep-felirat">'+t.bevezeto_kep_felirat+'</div>':'')+'</div>';
+    }
+    html+='<div class="tananyag-section"><div class="tananyag-section-title" style="color:'+color+'">📝 Összefoglaló</div>'+
+      '<div class="tananyag-blokk kepjobb">'+
+        '<div class="tananyag-blokk-szoveg"><p class="tananyag-text">'+t.bevezeto+'</p></div>'+
+        kepHTML+
+      '</div></div>';
+  }
+
+  // ── Fontos fogalmak – mindegyikhez opcionális kép ──
   if(t.fogalmak&&t.fogalmak.length){
     html+='<div class="tananyag-section"><div class="tananyag-section-title" style="color:'+color+'">🔑 Fontos fogalmak</div><div class="tananyag-fogalom-grid">';
-    t.fogalmak.forEach(function(f){html+='<div class="tananyag-fogalom"><strong style="color:'+color+'">'+f.nev+'</strong><span>'+f.leiras+'</span></div>';});
+    t.fogalmak.forEach(function(f){
+      if(f.kep){
+        html+='<div class="tananyag-fogalom"><div class="tananyag-fogalom-kep">'+
+          '<img src="'+f.kep+'" alt="'+f.nev+'">'+
+          '<div class="tananyag-fogalom-szoveg"><strong style="color:'+color+'">'+f.nev+'</strong><span>'+f.leiras+'</span></div>'+
+          '</div></div>';
+      } else {
+        html+='<div class="tananyag-fogalom"><strong style="color:'+color+'">'+f.nev+'</strong><span>'+f.leiras+'</span></div>';
+      }
+    });
     html+='</div></div>';
   }
-  if(t.erdekes){html+='<div class="tananyag-section"><div class="tananyag-erdekes"><p>'+t.erdekes+'</p></div></div>';}
+
+  // ── Érdekesség – opcionális kép ──
+  if(t.erdekes){
+    var eKepHTML='';
+    if(t.erdekes_kep){
+      eKepHTML='<div class="tananyag-blokk-kep" style="margin-top:6px;"><img src="'+t.erdekes_kep+'" alt="érdekesség">'+(t.erdekes_kep_felirat?'<div class="tananyag-kep-felirat">'+t.erdekes_kep_felirat+'</div>':'')+'</div>';
+    }
+    html+='<div class="tananyag-section"><div class="tananyag-blokk kepjobb"><div class="tananyag-blokk-szoveg"><div class="tananyag-erdekes"><p>'+t.erdekes+'</p></div></div>'+eKepHTML+'</div></div>';
+  }
+
   document.getElementById('tananyagBody').innerHTML=html;
   document.getElementById('tananyagOverlay').classList.add('open');
   document.body.style.overflow='hidden';
